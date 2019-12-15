@@ -3,13 +3,31 @@
 <h3>视频投稿:</h3>
   <el-form ref="form" :model="form" label-width="100px">
 
-    <el-form-item label="标题">
-      <el-input v-model="form.title"></el-input>
+    <el-form-item label="标题" :rules="[{required: true,message: '标题不能为空'},{min: 2,max: 30,message: '长度在 2 到 30 个字符'},]">
+      <el-input v-model="form.title" placeholder="最少两位，最长五十位"></el-input>
     </el-form-item>
 
-    <el-form-item label="视频描述">
-      <el-input type="textarea" v-model="form.ingo" size="medium"></el-input>
+    <el-form-item label="视频描述" :rules="[{required: true,message: '详情不能为空'}]">
+      <el-input type="textarea" v-model="form.info" size="medium" placeholder="最少两位，最长五百位"></el-input>
     </el-form-item>
+
+    <el-form-item label="视频封面">
+					<el-upload class="avatar-uploader"  action="" label="描述" ref="upload" :before-upload="fnBeforeUpload" :http-request="fnUploadRequest" :show-file-list="false">
+						<img v-if="imageUrl" :src="imageUrl" class="avatar">
+						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+						<div class="el-upload__tip" slot="tip">只能上传png/jpg文件，且不超过2M</div>
+					</el-upload>
+		</el-form-item>
+
+    <el-form-item label="视频">
+				<el-upload class="upload-demo" action="" :before-upload="vnBeforeUpload" :http-request="vnUploadRequest" multiple :limit="1" :on-exceed="handleExceed">
+						<el-button size="small" type="primary">点击上传</el-button>
+						<div slot="tip" class="el-upload__tip">{{ vUpLoadInfo }}</div>
+				</el-upload>
+		</el-form-item>
+		<el-form-item>
+				<el-progress  :percentage="percentage" :color="customColorMethod" :show-text="false"></el-progress>
+		</el-form-item>
 
     <el-form-item>
         <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -19,25 +37,157 @@
   </el-form>
 </div>
 </template>
+
+<style>
+.postVideo .el-form textarea{
+  min-height: 70px !important;
+}
+.postVideo .el-form input,textarea{
+  width: 90% !important;
+}
+	.avatar-uploader .el-upload {
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+	}
+	.avatar-uploader .el-upload:hover {
+		border-color: #409EFF;
+	}
+  .el-upload-dragger{
+    	width: 178px;
+  }
+	.avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 178px;
+		height: 178px;
+		line-height: 178px;
+		text-align: center;
+	}
+	.avatar {
+		max-width: 178px;
+		max-height: 178px;
+		display: block;
+	}
+</style>
+
 <script>
+
+import * as API from '@/api/video/';
+
   export default {
     data() {
       return {
+        //
+        imageUrl: '',
+        videoUrl: '',
+        couldUpload:false,
+        vUpLoadInfo:"只能上传MP4文件，且请您自行压缩",
+        percentage :0,
         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+          title: '',
+          info: '',
+          url: '',
+					avatar: '',
+        },
+        //
+
+        //
       }
     },
     methods: {
+      handleExceed(files) {
+				this.$message.warning(`仅可上传一个视频`);
+			},
+      fnBeforeUpload(file){
+          const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png');
+          const isLt2M = file.size / 1024 / 1024 < 2;
+
+          if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG或PNG 格式!');
+          }
+          if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+          }
+          return isJPG && isLt2M;
+      },
+      vnBeforeUpload(file){
+          const isMP4 = file.type === 'video/mp4';
+            if (!isMP4) {
+              this.$message.error('上传视频只能是 mp4 格式!');
+            }
+            return isMP4;
+      },
+      fnUploadRequest(option) {
+        API.postUploadTokenAvatar(option.file.name).then((res) => {
+          const oReq = new XMLHttpRequest();
+          oReq.open('PUT', res.data.put, true);
+          oReq.send(option.file);
+          oReq.onload = () => {
+            this.imageUrl = res.data.get;
+            this.form.avatar = res.data.key;
+          };
+        }).catch((error) => {
+          this.$notify.error({
+            title: '网路错误，或者服务器宕机',
+            message: error,
+          });
+        });
+      },
+      vnUploadRequest(option){
+        API.postUploadTokenVideo(option.file.name).then((res) => {
+          const oReq = new XMLHttpRequest();
+          oReq.open('PUT', res.data.put, true);
+          oReq.send(option.file);
+
+          oReq.upload.onprogress = (event) => {
+  						if (event.lengthComputable) {
+  							this.percentage = Math.floor(event.loaded / event.total * 100);
+                console.log(this.percentage)
+                };
+          };
+
+          oReq.onload = () => {
+            this.form.url = res.data.key;
+            this.vUpLoadInfo="上传成功";
+            this.percentage=0;
+            this.couldUpload=true;
+          };
+        }).catch((error) => {
+          this.$notify.error({
+            title: '网路错误，或者服务器宕机',
+            message: error,
+          });
+        });
+      },
       onSubmit() {
-        console.log('submit!');
+        if(!this.couldUpload){
+          this.$message.warning("您还没上传视频哟");
+          return false;
+        }
+        API.postVideo(this.form).then((res)=>{
+          if(res.code>0){
+            this.$notify({
+                title:'失败',
+                message:`${res.msg}`,
+                type:'error',
+            });
+          }else{
+            this.$notify({
+                title:'投稿成功',
+                message:`您的投稿ID为${res.data.id}`,
+                type:'success',
+            });
+          }
+        }).catch(function (err) {
+            this.$notify({
+                title:'失败',
+                message:"网络异常或服务器,请稍后再试",
+                type:'error',
+            });
+          });
       }
     }
   }
