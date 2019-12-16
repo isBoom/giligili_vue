@@ -5,7 +5,9 @@
       <el-menu-item index="/postVideo">投稿</el-menu-item>
       <el-menu-item index="/about">关于我们</el-menu-item>
 
-      <el-menu-item class="login" index="/register">注册</el-menu-item>
+      <el-menu-item class="login">
+        <a href="./login.html">注册</a>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -18,5 +20,10 @@ export default {
 <style>
 .navbar {
   margin-bottom: 30px;
+}
+.navbar .login a {
+  text-decoration: none;
+  color: #909399;
+  text-align: -webkit-match-parent;
 }
 </style>
