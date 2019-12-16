@@ -13,11 +13,24 @@
                     <img src="@/static/default.png" class="image" style="width:100%" />
                   </div>
                 </el-image>
-                <span style="position: absolute; bottom: 0; left: 0; color:white font-size:1em">播放量</span>
+                <span
+                  style="position: absolute; bottom: 5%; left: 5%; color:white; font-size:0.5em"
+                >
+                  <i class="el-icon-view"></i> 播放量
+                </span>
               </div>
-              <div style="padding: 14px; font-size:1em">
-                <div>{{ v.title }}</div>
-                <div>{{ v.info }}</div>
+              <div style=" font-size:0.7em">
+                <div class="home-video-info">
+                  <p>
+                    {{ v.title }}
+                    <br />
+                    <span></span>
+                    <br />
+                  </p>
+                </div>
+                <div style="color:#909399">
+                  <span>up主名字</span>
+                </div>
               </div>
             </el-card>
           </div>
@@ -27,12 +40,20 @@
   </div>
 </template>
 <style>
+.home-video-info p {
+  font-family: "黑体";
+  margin: 5% 10% 5% 0%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 .home-el-card {
   margin: 5%;
 }
 .home-el-col-big {
   width: 100%;
-  padding-bottom: 80%;
+  padding-bottom: 90%;
   position: relative;
   overflow: hidden;
 }

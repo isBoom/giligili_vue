@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <NavBar />
-    <div class="content">
+    <div class="app-content">
       <div class="app-body">
         <router-view></router-view>
       </div>
@@ -21,7 +21,7 @@ export default {
 .app {
   margin: 0 auto;
 }
-.content {
+.app-content {
   width: 1300px;
   min-height: 600px;
   margin: 0 auto;
