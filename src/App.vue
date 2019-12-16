@@ -1,19 +1,22 @@
 <template>
   <div id="app">
     <NavBar />
-    <router-view></router-view>
+    <div class="app-body">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
-
 <script>
 import NavBar from "./components/NavBar.vue";
-
 export default {
   name: "app",
   components: {
-    NavBar,
+    NavBar
   }
 };
 </script>
-
-<style></style>
+<style>
+.app-body {
+  padding: 0 50px 0 50px;
+}
+</style>>

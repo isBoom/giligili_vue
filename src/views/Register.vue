@@ -67,13 +67,12 @@ export default {
           console.log(res);
           if (res.code > 0) {
             this.$notify.error({
-              titie: "注册失败",
+              title: "注册失败",
               message: res.msg
             });
           } else {
             this.$notify({
-              titie: "注册成功",
-              message: "注册成功",
+              title: "注册成功",
               type: "success"
             });
           }
