@@ -25,7 +25,7 @@
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          <div class="el-upload__tip" slot="tip">只能上传png/jpg文件，且不超过2M</div>
+          <div class="el-upload__tip" slot="tip">只能上传png/jpg文件，且不超过2M文件(16:9)</div>
         </el-upload>
       </el-form-item>
 
@@ -44,7 +44,12 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-progress :percentage="percentage" :color="customColorMethod" :show-text="false"></el-progress>
+        <el-progress
+          v-if="percentage"
+          :percentage="percentage"
+          :color="customColorMethod"
+          :show-text="false"
+        ></el-progress>
       </el-form-item>
 
       <el-form-item>
@@ -74,19 +79,19 @@ textarea {
   border-color: #409eff;
 }
 .el-upload-dragger {
-  width: 178px;
+  width: 200px;
 }
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+  width: 200px;
+  height: 112.5px;
+  line-height: 112.5px;
   text-align: center;
 }
 .avatar {
-  max-width: 178px;
-  max-height: 178px;
+  width: 200px;
+  height: 112.5px;
   display: block;
 }
 </style>
@@ -97,7 +102,6 @@ import * as API from "@/api/video/";
 export default {
   data() {
     return {
-      //
       imageUrl: "",
       videoUrl: "",
       couldUpload: false,
@@ -109,12 +113,18 @@ export default {
         url: "",
         avatar: ""
       }
-      //
-
-      //
     };
   },
   methods: {
+    customColorMethod(percentage) {
+      if (percentage < 50) {
+        return "#909399";
+      } else if (percentage < 100) {
+        return "#e6a23c";
+      } else {
+        return "#67c23a";
+      }
+    },
     handleExceed(files) {
       this.$message.warning(`仅可上传一个视频`);
     },
@@ -159,16 +169,14 @@ export default {
       API.postUploadTokenVideo(option.file.name)
         .then(res => {
           const oReq = new XMLHttpRequest();
-          oReq.open("PUT", res.data.put, true);
-          oReq.send(option.file);
-
           oReq.upload.onprogress = event => {
             if (event.lengthComputable) {
               this.percentage = Math.floor((event.loaded / event.total) * 100);
               console.log(this.percentage);
             }
           };
-
+          oReq.open("PUT", res.data.put, true);
+          oReq.send(option.file);
           oReq.onload = () => {
             this.form.url = res.data.key;
             this.vUpLoadInfo = "上传成功";
@@ -185,7 +193,11 @@ export default {
     },
     onSubmit() {
       if (!this.couldUpload) {
-        this.$message.warning("您还没上传视频哟");
+        if (this.percentage > 0) {
+          this.$message.warning("请静待视频上传完毕");
+        } else {
+          this.$message.warning("您还没上传视频哟");
+        }
         return false;
       }
       API.postVideo(this.form)

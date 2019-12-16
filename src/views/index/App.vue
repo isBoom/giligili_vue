@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <NavBar />
-    <div class="app-body">
-      <router-view></router-view>
+    <div class="content">
+      <div class="app-body">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -16,7 +18,12 @@ export default {
 };
 </script>
 <style>
-.app-body {
-  padding: 0 50px 0 50px;
+.app {
+  margin: 0 auto;
+}
+.content {
+  width: 1300px;
+  min-height: 600px;
+  margin: 0 auto;
 }
 </style>>

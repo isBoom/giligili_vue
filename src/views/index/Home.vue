@@ -1,63 +1,98 @@
 <template>
-<div class="home">
-  <el-row>
-    <el-col :span="4" v-for="v in videos" :key=v.id>
-      <el-card class="home-el-card">
-        <el-image :src="v.avatar" class="image" style="width:100%">
-            <div slot="error" class="image-slot">
-              <img src="@/static/default.png"  class="image" style="width:100%" />
+  <div class="home">
+    <el-row>
+      <el-col :span="4" v-for="v in videos" :key="v.id">
+        <!-- 大盒子强行宽高比 -->
+        <div class="home-el-col-big">
+          <div class="home-el-col-small">
+            <el-card class="home-el-card">
+              <!-- 强行宽高比 -->
+              <div class="home-img-banner">
+                <el-image :src="v.avatar" class="image" style="width:100%">
+                  <div slot="error" class="image-slot">
+                    <img src="@/static/default.png" class="image" style="width:100%" />
+                  </div>
+                </el-image>
+                <span style="position: absolute; bottom: 0; left: 0; color:white font-size:1em">播放量</span>
+              </div>
+              <div style="padding: 14px; font-size:1em">
+                <div>{{ v.title }}</div>
+                <div>{{ v.info }}</div>
+              </div>
+            </el-card>
           </div>
-        </el-image>
-          <div style="padding: 14px;">
-            <div>{{ v.title }}</div>
-            <div>{{ v.info }}</div>
-          </div>
-      </el-card>
-    </el-col>
-  </el-row>
-</div>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
-
-<script>
-import * as API from '@/api/video/';
-export default {
-  name: "home",
-  data(){
-    return {
-      videos:[],
-    }
-  },
-  methods:{
-    load(){
-      API.getVideos().then((res)=>{
-        if(res.code>0){
-          alert("err")
-        }else{
-          this.videos = res.data
-          console.log(this.videos)
-        }
-      }).catch((err)=>{
-        this.$message({
-          message:"服务器开小差啦，请您稍后再试",
-          duration: 0,
-          type:error,
-          })
-      })
-    }
-  },
-  beforeMount(){
-    this.load();
-  },
-};
-</script>
-<script>
-  document.getElement
-</script>
 <style>
-.home-el-card{
-  margin:10px;
+.home-el-card {
+  margin: 5%;
 }
-.home-el-card .el-card__body{
-  height:200px
+.home-el-col-big {
+  width: 100%;
+  padding-bottom: 80%;
+  position: relative;
+  overflow: hidden;
+}
+.home-el-col-small {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.el-card__body {
+  padding: 0;
+}
+/* 强制宽高比 */
+.home-el-card .home-img-banner {
+  width: 100%;
+  padding-bottom: 56.25%;
+  position: relative;
+}
+.home-el-card .home-img-banner .el-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>
+<script>
+import * as API from "@/api/video/";
+export default {
+  name: "home",
+  data() {
+    return {
+      videos: []
+    };
+  },
+  methods: {
+    load() {
+      console.log("kaishi");
+      API.getVideos()
+        .then(res => {
+          console.log(res);
+          if (res.code > 0) {
+            alert("err");
+          } else {
+            this.videos = res.data;
+          }
+        })
+        .catch(err => {
+          this.$message({
+            message: "服务器开小差啦，请您稍后再试",
+            duration: 0,
+            type: error
+          });
+        });
+    }
+  },
+  created() {
+    this.load();
+  }
+};
+</script>
+
