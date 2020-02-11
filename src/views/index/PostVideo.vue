@@ -97,7 +97,8 @@ textarea {
 </style>
 
 <script>
-import * as API from "@/api/video/";
+import * as API from "@/api/video";
+import global from "@/static/global.js";
 
 export default {
   data() {
@@ -117,9 +118,9 @@ export default {
   },
   methods: {
     customColorMethod(percentage) {
-      if (percentage < 50) {
+      if (percentage < 40) {
         return "#909399";
-      } else if (percentage < 100) {
+      } else if (percentage < 80) {
         return "#e6a23c";
       } else {
         return "#67c23a";
@@ -150,6 +151,13 @@ export default {
     fnUploadRequest(option) {
       API.postUploadTokenAvatar(option.file.name)
         .then(res => {
+          if (res.code != 0) {
+            this.$notify.error({
+              title: "错误",
+              message: res.msg
+            });
+            return;
+          }
           const oReq = new XMLHttpRequest();
           oReq.open("PUT", res.data.put, true);
           oReq.send(option.file);
@@ -168,6 +176,13 @@ export default {
     vnUploadRequest(option) {
       API.postUploadTokenVideo(option.file.name)
         .then(res => {
+          if (res.code != 0) {
+            this.$notify.error({
+              title: "错误",
+              message: res.msg
+            });
+            return;
+          }
           const oReq = new XMLHttpRequest();
           oReq.upload.onprogress = event => {
             if (event.lengthComputable) {
@@ -214,6 +229,8 @@ export default {
               message: `您的投稿ID为${res.data.id}`,
               type: "success"
             });
+            //传完了
+            window.location = "";
           }
         })
         .catch(function(err) {

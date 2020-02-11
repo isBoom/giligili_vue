@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="homeVideoList">
     <el-row>
       <el-col :span="4" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
         <!-- 大盒子强行宽高比 -->
@@ -43,7 +43,7 @@
 <script>
 import * as API from "@/api/video/";
 export default {
-  name: "home",
+  name: "homeVideoList",
   data() {
     return {
       videos: []

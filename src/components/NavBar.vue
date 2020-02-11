@@ -5,20 +5,53 @@
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/postVideo">投稿</el-menu-item>
         <el-menu-item index="/about">关于我们</el-menu-item>
-
-        <el-menu-item class="login">
-          <a href="./login.html#/">注册</a>
-        </el-menu-item>
+        <div>
+          <el-menu-item class="login">
+            <a href="./login.html#/register">注册</a>
+          </el-menu-item>
+          <el-menu-item class="login">
+            <a href="./login.html#/">登录</a>
+          </el-menu-item>
+        </div>
       </el-menu>
     </div>
   </div>
 </template>
 
 <script>
+import * as API from "@/api/user/";
 export default {
-  name: "NavBar"
+  name: "NavBar",
+  data() {
+    return {
+      isLogin: false
+    };
+  },
+  methods: {
+    load() {
+      API.simpleInfoMe()
+        .then(res => {
+          if (res.code == 0 || res.code != 401) {
+            this.videos = res.data;
+          } else {
+            console.log(res);
+          }
+        })
+        .catch(err => {
+          this.$message({
+            message: "服务器开小差啦，请您稍后再试",
+            duration: 0,
+            type: error
+          });
+        });
+    }
+  },
+  created() {
+    this.load();
+  }
 };
 </script>
+
 <style>
 .navbar-box {
   width: 100%;
@@ -32,6 +65,9 @@ export default {
 }
 .el-menu--horizontal.el-menu {
   border-bottom: solid 0px #e6e6e6 !important;
+}
+.navbar .login {
+  float: right !important;
 }
 .navbar .login a {
   text-decoration: none;

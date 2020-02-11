@@ -68,20 +68,30 @@ export default {
       ) {
         this.$message.warning("密码限制长度8-40");
       } else {
-        API.postRregister(this.form).then(res => {
-          console.log(res);
-          if (res.code > 0) {
-            this.$notify.error({
-              title: "注册失败",
-              message: res.msg
-            });
-          } else {
+        API.postRregister(this.form)
+          .then(res => {
+            console.log(res);
+            if (res.code > 0) {
+              this.$notify.error({
+                title: "注册失败",
+                message: res.msg
+              });
+            } else {
+              this.$notify({
+                title: "注册成功",
+                type: "success"
+              });
+              this.$router.push({
+                path: "/"
+              });
+            }
+          })
+          .catch(e => {
             this.$notify({
-              title: "注册成功",
-              type: "success"
+              title: "网络异常或服务器宕机",
+              type: "error"
             });
-          }
-        });
+          });
       }
     }
   }
