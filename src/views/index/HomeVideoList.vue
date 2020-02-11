@@ -1,7 +1,7 @@
 <template>
   <div class="homeVideoList">
     <el-row>
-      <el-col :span="4" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
+      <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
         <!-- 大盒子强行宽高比 -->
         <div class="home-el-col-big">
           <div class="home-el-col-small">
