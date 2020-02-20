@@ -98,7 +98,6 @@ textarea {
 
 <script>
 import * as API from "@/api/video";
-import global from "@/static/global.js";
 
 export default {
   data() {

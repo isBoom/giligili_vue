@@ -10,13 +10,15 @@
               <div class="home-img-banner">
                 <el-image :src="v.avatar" class="image" style="width:100%">
                   <div slot="error" class="image-slot">
-                    <img src="@/static/default.png" class="image" style="width:100%" />
+                    <img src="@/static/defaultAvatar.jpg" class="image" style="width:100%" />
                   </div>
                 </el-image>
                 <span
                   style="position: absolute; bottom: 5%; left: 5%; color:white; font-size:0.5em"
                 >
-                  <i class="el-icon-view"></i> 播放量
+                  <i class="el-icon-view">
+                    <span v-html="nbsp+' '+v.view"></span>
+                  </i>
                 </span>
               </div>
               <div style=" font-size:0.7em">
@@ -46,6 +48,7 @@ export default {
   name: "homeVideoList",
   data() {
     return {
+      nbsp: "&nbsp;",
       videos: []
     };
   },
@@ -59,7 +62,7 @@ export default {
             this.$message({
               message: res.msg,
               duration: 0,
-              type: error
+              type: "error"
             });
           }
         })
@@ -67,7 +70,7 @@ export default {
           this.$message({
             message: "服务器开小差啦，请您稍后再试",
             duration: 0,
-            type: error
+            type: "error"
           });
         });
     },

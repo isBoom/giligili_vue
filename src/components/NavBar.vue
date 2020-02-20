@@ -41,7 +41,7 @@ export default {
           this.$message({
             message: "服务器开小差啦，请您稍后再试",
             duration: 0,
-            type: error
+            type: "error"
           });
         });
     }

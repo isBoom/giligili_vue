@@ -16,3 +16,7 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount("#app-login")
+
+var head = document.getElementsByTagName("head")[0]
+head.innerHTML +=
+    '<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />'

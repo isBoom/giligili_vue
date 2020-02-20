@@ -3,7 +3,8 @@ module.exports = {
     devServer: {
         proxy: {
             "/apis": {
-                target: "http://127.0.0.1:8000/", // target host
+                //target: "http://127.0.0.1:8000/", // target host
+                target: "http://39.107.48.224:8000/", // target host
                 ws: true, // proxy websockets
                 changeOrigin: true, // needed for virtual hosted sites
                 // secure: false,

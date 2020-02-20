@@ -24,3 +24,15 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount("#app")
+
+var head = document.getElementsByTagName("head")[0]
+head.innerHTML +=
+    '<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />'
+    // var meta = document.createElement("meta")
+    // meta
+    //     .setAttribute("http-equiv", "Content-Security-Policy")
+    //     .setAttribute("content", "upgrade-insecure-requests")
+    // head.appendChild(meta)
+    // document.write(
+    //     '<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />'
+    // )

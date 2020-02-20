@@ -35,11 +35,13 @@ export default {
             //类型
             type: "video/mp4",
             //url地址
-            src: ""
+            src:
+              "https://xxxholic.oss-cn-hongkong.aliyuncs.com/upload/video/defaultVideo.mp4"
           }
         ],
         //你的封面地址
-        poster: "",
+        poster:
+          "https://xxxholic.oss-cn-hongkong.aliyuncs.com/upload/avatar/defaultWhite.jpg",
         //允许覆盖Video.js无法播放媒体源时显示的默认信息。
         notSupportedMessage: "此视频暂无法播放，请稍后再试",
         controlBar: {
@@ -57,20 +59,13 @@ export default {
       API.getVideo(this.$route.params.id)
         .then(res => {
           this.playerOptions.sources[0].src = res.data.url;
-          //判断后缀
-          var suffix = res.data.avatar.split(".")[
-            res.data.avatar.split(".").length - 1
-          ];
-          if (suffix == "png" || suffix == "jpg") {
-            console.log("有封面");
-            this.playerOptions.poster = res.data.avatar;
-          }
+          this.playerOptions.poster = res.data.avatar;
         })
         .catch(error => {
           this.$message({
             message: "发生了意外",
             duration: 0,
-            type: error
+            type: "error"
           });
         });
     }

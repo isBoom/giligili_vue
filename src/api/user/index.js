@@ -1,8 +1,5 @@
 import axios from "axios"
 
-import global from "@/static/global.js"
-const url = global.LOCALURL
-
 const postRregister = form =>
     axios.post(`/apis/api/v1/user/register`, form).then(res => res.data)
 

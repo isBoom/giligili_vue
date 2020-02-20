@@ -22,7 +22,6 @@
 </template>
 <script>
 import * as API from "@/api/user/";
-import global from "@/static/global.js";
 export default {
   data() {
     return {
