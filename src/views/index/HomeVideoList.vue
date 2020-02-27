@@ -1,11 +1,11 @@
 <template>
   <div class="homeVideoList">
-    <el-row>
+    <el-row :gutter="15">
       <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
         <!-- 大盒子强行宽高比 -->
         <div class="home-el-col-big">
           <div class="home-el-col-small">
-            <el-card class="home-el-card">
+            <el-card class="home-el-card" shadow="never">
               <!-- 强行宽高比 -->
               <div class="home-img-banner">
                 <el-image :src="v.avatar" class="image" style="width:100%">
@@ -21,17 +21,15 @@
                   </i>
                 </span>
               </div>
-              <div style=" font-size:0.7em">
+              <div style="font-size:0.7em">
                 <div class="home-video-info">
-                  <p>
+                  <p style="font-family:''">
                     {{ v.title }}
-                    <br />
                     <span></span>
-                    <br />
                   </p>
                 </div>
-                <div style="color:#909399">
-                  <span>up主名字</span>
+                <div style="position: absolute;bottom:10%;color:#909399;font-family:'宋体';">
+                  <span v-html="'up'+' '+v.user.nickname"></span>
                 </div>
               </div>
             </el-card>
@@ -49,15 +47,17 @@ export default {
   data() {
     return {
       nbsp: "&nbsp;",
+      defaultAvatar: "@/static/defaultAvatar.jpg",
       videos: []
     };
   },
   methods: {
-    load() {
+    getVideos() {
       API.getVideos()
         .then(res => {
           if (res.code == 0 || res.code != 401) {
             this.videos = res.data;
+            //console.log(res);
           } else {
             this.$message({
               message: res.msg,
@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    this.load();
+    this.getVideos();
   }
 };
 </script>
@@ -92,12 +92,9 @@ export default {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-.home-el-card {
-  margin: 5%;
-}
 .home-el-col-big {
   width: 100%;
-  padding-bottom: 90%;
+  padding-bottom: 100%;
   position: relative;
   overflow: hidden;
 }
@@ -108,9 +105,18 @@ export default {
   top: 0;
   left: 0;
 }
+/* 去边框 */
+.el-card {
+  border: 0px solid !important;
+}
+/* .el-card.is-always-shadow {
+  -webkit-box-shadow: 0 0 0 !important;
+  box-shadow: 0px 0px 0px !important;
+} */
 .el-card__body {
   padding: 0 !important;
 }
+
 /* 强制宽高比 */
 .home-el-card .home-img-banner {
   width: 100%;

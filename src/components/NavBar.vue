@@ -5,13 +5,22 @@
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/postVideo">投稿</el-menu-item>
         <el-menu-item index="/about">关于我们</el-menu-item>
-        <div>
-          <el-menu-item class="login">
-            <a href="./login.html#/register">注册</a>
-          </el-menu-item>
-          <el-menu-item class="login">
-            <a href="./login.html#/">登录</a>
-          </el-menu-item>
+        <div v-if="isShownNvbarRight" key="1">
+          <div v-if="isLogin" class="navbarRight">
+            <el-menu-item id="headPortrait">
+              <a :href="user.avatar">
+                <el-avatar :src="user.avatar">头像</el-avatar>
+              </a>
+            </el-menu-item>
+          </div>
+          <div v-else>
+            <el-menu-item class="navbarRight">
+              <a href="./login.html#/register">注册</a>
+            </el-menu-item>
+            <el-menu-item class="navbarRight">
+              <a href="./login.html#/">登录</a>
+            </el-menu-item>
+          </div>
         </div>
       </el-menu>
     </div>
@@ -24,17 +33,19 @@ export default {
   name: "NavBar",
   data() {
     return {
-      isLogin: false
+      isLogin: false,
+      isShownNvbarRight: false,
+      user: {}
     };
   },
   methods: {
     load() {
       API.simpleInfoMe()
         .then(res => {
-          if (res.code == 0 || res.code != 401) {
-            this.videos = res.data;
-          } else {
+          if (res.code == 0) {
+            this.isLogin = true;
             console.log(res);
+            this.user = res.data;
           }
         })
         .catch(err => {
@@ -44,6 +55,10 @@ export default {
             type: "error"
           });
         });
+      var thisVue = this;
+      setTimeout(function() {
+        thisVue.isShownNvbarRight = true;
+      }, 1000);
     }
   },
   created() {
@@ -53,6 +68,9 @@ export default {
 </script>
 
 <style>
+/* 头像hover */
+#headPortrait:hover {
+}
 .navbar-box {
   width: 100%;
   min-width: 1300px;
@@ -66,10 +84,10 @@ export default {
 .el-menu--horizontal.el-menu {
   border-bottom: solid 0px #e6e6e6 !important;
 }
-.navbar .login {
+.navbar .navbarRight {
   float: right !important;
 }
-.navbar .login a {
+.navbar .navbarRight a {
   text-decoration: none;
   color: #909399;
   text-align: -webkit-match-parent;

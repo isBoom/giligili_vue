@@ -8,6 +8,9 @@ const getVideo = id =>
 
 const getVideos = () => axios.get(`/apis/api/v1/videos`).then(res => res.data)
 
+const getDailyRank = () =>
+    axios.get(`/apis/api/v1/rank/daily`).then(res => res.data)
+
 const postUploadTokenAvatar = fName =>
     axios
     .post(`/apis/api/v1/upload/tokenAvatar`, { fileName: fName })
@@ -22,6 +25,7 @@ export {
     postVideo,
     getVideo,
     getVideos,
+    getDailyRank,
     postUploadTokenAvatar,
     postUploadTokenVideo
 }

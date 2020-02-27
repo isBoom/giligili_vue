@@ -6,22 +6,22 @@
 </template>
 
 <script>
-import HomeVideoList from "./HomeVideoList.vue"
-import HomeHot from "./HomeHot.vue"
+import HomeVideoList from "./HomeVideoList.vue";
+import HomeHot from "./HomeHot.vue";
 export default {
   name: "home",
   data() {
-    return {}
+    return {};
   },
   components: {
     HomeVideoList,
     HomeHot
   }
-}
+};
 </script>
 <style scoped>
 .homeVideoList {
-  width: 70%;
+  width: 65%;
   float: left;
 }
 .HomeHot {
