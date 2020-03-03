@@ -1,42 +1,47 @@
 <template>
   <div class="homeVideoList">
-    <el-row :gutter="15">
-      <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
-        <!-- 大盒子强行宽高比 -->
-        <div class="home-el-col-big">
-          <div class="home-el-col-small">
-            <el-card class="home-el-card" shadow="never">
-              <!-- 强行宽高比 -->
-              <div class="home-img-banner">
-                <el-image :src="v.avatar" class="image" style="width:100%">
-                  <div slot="error" class="image-slot">
-                    <img src="@/static/defaultAvatar.jpg" class="image" style="width:100%" />
+    <div>
+      <p>视频</p>
+    </div>
+    <div>
+      <el-row :gutter="15">
+        <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
+          <!-- 大盒子强行宽高比 -->
+          <div class="home-el-col-big">
+            <div class="home-el-col-small">
+              <el-card class="home-el-card" shadow="never">
+                <!-- 强行宽高比 -->
+                <div class="home-img-banner">
+                  <el-image :src="v.avatar" class="image" style="width:100%">
+                    <div slot="error" class="image-slot">
+                      <img src="@/static/defaultAvatar.jpg" class="image" style="width:100%" />
+                    </div>
+                  </el-image>
+                  <span
+                    style="position: absolute; bottom: 5%; left: 5%; color:white; font-size:0.5em"
+                  >
+                    <i class="el-icon-view">
+                      <span v-html="nbsp+' '+v.view"></span>
+                    </i>
+                  </span>
+                </div>
+                <div style="font-size:0.7em">
+                  <div class="home-video-info">
+                    <p>
+                      {{ v.title }}
+                      <span></span>
+                    </p>
                   </div>
-                </el-image>
-                <span
-                  style="position: absolute; bottom: 5%; left: 5%; color:white; font-size:0.5em"
-                >
-                  <i class="el-icon-view">
-                    <span v-html="nbsp+' '+v.view"></span>
-                  </i>
-                </span>
-              </div>
-              <div style="font-size:0.7em">
-                <div class="home-video-info">
-                  <p style="font-family:''">
-                    {{ v.title }}
-                    <span></span>
-                  </p>
+                  <div style="position: absolute;bottom:10%;color:#909399;font-family:'宋体';">
+                    <span v-html="'up'+' '+v.user.nickname"></span>
+                  </div>
                 </div>
-                <div style="position: absolute;bottom:10%;color:#909399;font-family:'宋体';">
-                  <span v-html="'up'+' '+v.user.nickname"></span>
-                </div>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -85,8 +90,7 @@ export default {
 </script>
 <style>
 .home-video-info p {
-  font-family: "黑体";
-  margin: 5% 10% 5% 0%;
+  margin-top: 5%;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;

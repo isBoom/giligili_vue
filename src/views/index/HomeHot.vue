@@ -1,44 +1,80 @@
 <template>
   <div class="homeHot">
-    <el-row>
-      <el-col :span="24" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
-        <!-- 大盒子强行宽高比 -->
-        <div class="home-el-col-big">
-          <div class="home-el-col-small">
-            <el-card class="home-el-card" shadow="hover">
-              <!-- 强行宽高比 -->
-              <div class="home-img-banner">
-                <el-image :src="v.avatar" class="image" style="width:100%">
-                  <div slot="error" class="image-slot">
-                    <img src="@/static/defaultAvatar.jpg" class="image" style="width:100%" />
+    <div>
+      <p>排行榜</p>
+    </div>
+    <div>
+      <el-row class="el-hot">
+        <el-col
+          class="el-row-for"
+          v-for="(v , i) in videos"
+          :key="v.id"
+          @click.native="videoInfo(v)"
+        >
+          <!-- details -->
+          <div class="details" id="details">
+            <div class="el-box-left">
+              <el-col :span="9">
+                <el-card class="home-el-card" shadow="hover">
+                  <div class="home-img-banner">
+                    <el-image :src="v.avatar" class="image">
+                      <div slot="error" class="image-slot">
+                        <img src="@/static/defaultAvatar.jpg" class="image" />
+                      </div>
+                    </el-image>
                   </div>
-                </el-image>
-                <span
-                  style="position: absolute; bottom: 5%; left: 5%; color:white; font-size:0.5em"
-                >
-                  <i class="el-icon-view">
-                    <span v-html="nbsp+nbsp+v.view"></span>
-                  </i>
-                </span>
+                </el-card>
+              </el-col>
+              <div class="el-box-right">
+                <el-col :span="14" :push="1">
+                  <p>{{ v.title }}</p>
+                  <div class="details-span">
+                    <span v-html="v.user.nickname"></span>
+                    <span v-html="nbsp+nbsp+nbsp"></span>
+                    <span v-html="nbsp+nbsp+nbsp"></span>
+                    <span v-html="unix(v.created_at)"></span>
+                  </div>
+                </el-col>
               </div>
-              <div style="font-size:0.7em">
-                <div class="home-video-info">
-                  <p style="font-family:''">
-                    {{ v.title }}
-                    <br />
-                    <span></span>
-                    <br />
-                  </p>
-                </div>
-                <div style="color:#909399;font-family:'宋体'">
-                  <span v-html="'up'+' '+v.user.nickname"></span>
-                </div>
-              </div>
-            </el-card>
+            </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
+          <!-- 主体 -->
+          <el-col :span="2" class="hot">
+            <p class="rank">{{i+1}}</p>
+          </el-col>
+          <el-col v-if="i == 0" :span="21">
+            <div class="el-box">
+              <!-- 主体左 -->
+              <div class="el-box-left">
+                <el-col :span="8">
+                  <el-card class="home-el-card" shadow="hover">
+                    <div class="home-img-banner">
+                      <el-image :src="v.avatar" class="image">
+                        <div slot="error" class="image-slot">
+                          <img src="@/static/defaultAvatar.jpg" class="image" />
+                        </div>
+                      </el-image>
+                    </div>
+                  </el-card>
+                </el-col>
+              </div>
+              <!-- 主体右 -->
+              <div class="el-box-right">
+                <el-col :span="14" :push="1">
+                  <p>{{ v.title }}</p>
+                  <span v-html="'播放'+' '+v.view"></span>
+                </el-col>
+              </div>
+            </div>
+          </el-col>
+          <el-col v-else :span="21" class="el-else">
+            <el-col class="video-title">
+              <p>{{ v.title }}</p>
+            </el-col>
+          </el-col>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 </template>
@@ -48,11 +84,19 @@ export default {
   name: "homeHot",
   data() {
     return {
-      nbsp: "&nbsp;",
+      nbsp: "&#12288;",
       videos: []
     };
   },
   methods: {
+    unix(value) {
+      let date = new Date(value * 1000);
+      let y = date.getFullYear();
+      let MM = date.getMonth() + 1;
+      MM = MM < 10 ? "0" + MM : MM;
+      let d = date.getDate();
+      return y + "-" + MM + "-" + d;
+    },
     getDailyRank() {
       API.getDailyRank()
         .then(res => {
@@ -72,5 +116,77 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
+/* 视频详情 显现*/
+.details {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 5px;
+  display: none;
+  width: 88%;
+  margin-top: -90px;
+  padding: 10px;
+  z-index: 1000;
+}
+.el-row-for:hover .details {
+  display: block;
+  border: 1px solid #dedede;
+}
+.details:hover {
+  display: none !important;
+}
+/* rank 数字 */
+.el-hot > div:nth-last-of-type(-n + 10) .rank {
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 0.65em;
+  text-align: center;
+  margin: 0;
+}
+.el-hot > div:nth-of-type(-n + 3) .rank {
+  border-radius: 3px;
+  background: #2581dd;
+  color: aliceblue;
+}
+.el-hot > div:not(:nth-of-type(1)) .rank {
+  margin: 20% 0;
+}
+/* title hover */
+.el-row-for :hover p {
+  color: #2581dd;
+}
+/* details右侧最后一行 */
+.details .el-box-right .el-col {
+  min-height: 3em;
+}
+.details .details-span {
+  position: absolute;
+  bottom: -22%;
+  left: 2%;
+  overflow: hidden;
+}
+.el-box-right span {
+  margin: 0;
+  font-size: 0.5em;
+  color: #909399;
+}
+/* 最大显现行数 */
+.el-box-right p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.8em;
+  margin: 0;
+}
+.video-title p {
+  display: -webkit-box;
+  color: #303133;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 2em;
+  margin: 0;
+}
 </style>
