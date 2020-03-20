@@ -6,10 +6,12 @@
         <router-view :key="key" />
       </div>
     </div>
+    <Copyright />
   </div>
 </template>
 <script>
-import NavBar from "@/components/NavBar.vue";
+import NavBar from "@/components/NavBar.vue"
+import Copyright from "@/components/Copyright.vue"
 export default {
   name: "app",
   computed: {
@@ -17,13 +19,14 @@ export default {
       //路由发生变化就重新渲染
       return this.$route.name
         ? this.$route.name + +new Date()
-        : this.$route + +new Date();
+        : this.$route + +new Date()
     }
   },
   components: {
-    NavBar
+    NavBar,
+    Copyright
   }
-};
+}
 </script>
 <style>
 .app {

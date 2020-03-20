@@ -29,6 +29,7 @@
 
 <script>
 import * as API from "@/api/user/";
+import store from "@/store/index.js";
 export default {
   name: "NavBar",
   data() {
@@ -38,14 +39,15 @@ export default {
       user: {}
     };
   },
+  store,
   methods: {
     load() {
       API.simpleInfoMe()
         .then(res => {
           if (res.code == 0) {
             this.isLogin = true;
-            console.log(res);
             this.user = res.data;
+            this.$store.state.user = res.data;
           }
         })
         .catch(err => {
@@ -69,6 +71,9 @@ export default {
 
 <style>
 /* 头像hover */
+body {
+  overflow-y: visible !important;
+}
 #headPortrait:hover {
 }
 .navbar-box {

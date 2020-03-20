@@ -62,7 +62,6 @@ export default {
         .then(res => {
           if (res.code == 0 || res.code != 401) {
             this.videos = res.data;
-            //console.log(res);
           } else {
             this.$message({
               message: res.msg,
