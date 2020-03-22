@@ -47,7 +47,9 @@ export default {
               title: "登陆成功",
               type: "success"
             });
-            window.location.href = "../";
+            setTimeout(function() {
+              window.location.href = "../";
+            }, 300);
           }
         })
         .catch(e => {

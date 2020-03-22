@@ -7,11 +7,17 @@
         <el-menu-item index="/about">关于我们</el-menu-item>
         <div v-if="isShownNvbarRight" key="1">
           <div v-if="isLogin" class="navbarRight">
-            <el-menu-item id="headPortrait">
-              <a :href="user.avatar">
-                <el-avatar :src="user.avatar">头像</el-avatar>
-              </a>
-            </el-menu-item>
+            <el-dropdown trigger="hover">
+              <span class="el-dropdown-link">
+                <el-menu-item id="headPortrait">
+                  <el-avatar :src="user.avatar">头像</el-avatar>
+                </el-menu-item>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item class="clearfix">个人中心</el-dropdown-item>
+                <el-dropdown-item class="clearfix" @click.native="exit">注销登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
           <div v-else>
             <el-menu-item class="navbarRight">
@@ -41,6 +47,23 @@ export default {
   },
   store,
   methods: {
+    exit() {
+      API.exit()
+        .then(res => {
+          if (res.code == 0) {
+            this.user = {};
+            this.$store.state.user = {};
+            this.isLogin = false;
+            this.$router.go(0);
+          } else {
+            console.log(res);
+          }
+        })
+        .catch(err => {
+          this.$message.error("退出失败");
+          console.log(err);
+        });
+    },
     load() {
       API.simpleInfoMe()
         .then(res => {
@@ -73,8 +96,6 @@ export default {
 /* 头像hover */
 body {
   overflow-y: visible !important;
-}
-#headPortrait:hover {
 }
 .navbar-box {
   width: 100%;

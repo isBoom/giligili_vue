@@ -1,8 +1,12 @@
-import Vue from "vue"
-import Router from "vue-router"
-import Home from "./Home.vue"
+/* jshint esversion: 6 */
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "./Home.vue";
+import About from "./About.vue";
+import Video from "./Video.vue";
+import PostVideo from "./PostVideo.vue";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [{
@@ -13,20 +17,17 @@ export default new Router({
         {
             path: "/about",
             name: "about",
-            component: () =>
-                import ( /* webpackChunkName: "about" */ "./About.vue")
+            component: About
         },
         {
             path: "/postVideo",
             name: "postVideo",
-            component: () =>
-                import ( /* webpackChunkName: "about" */ "./PostVideo.vue")
+            component: PostVideo
         },
         {
             path: "/video/:id",
             name: "video",
-            component: () =>
-                import ( /* webpackChunkName: "about" */ "./Video.vue")
+            component: Video
         }
     ]
 })
